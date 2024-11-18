@@ -1,7 +1,6 @@
-package com.devspacecinenow
+package com.devspacecinenow.detail.presentation
 
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.devspacecinenow.ApiService
+import com.devspacecinenow.common.model.MovieDTO
+import com.devspacecinenow.common.data.RetrofitClient
 import com.devspacecinenow.ui.theme.CineNowTheme
 import retrofit2.Call
 import retrofit2.Callback
@@ -94,7 +96,7 @@ private fun MovieDetailContent(movie: MovieDTO) {
     ) {
         AsyncImage(
             modifier = Modifier
-                .height(200.dp)
+                .height(500.dp)
                 .fillMaxSize(),
             contentScale = ContentScale.Crop,
             model = movie.posterFullPath,

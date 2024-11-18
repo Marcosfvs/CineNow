@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.devspacecinenow.detail.presentation.MovieDetailViewModel
 import com.devspacecinenow.list.presentation.MovieListViewModel
 import com.devspacecinenow.ui.theme.CineNowTheme
 import retrofit2.Call
@@ -42,7 +43,8 @@ import retrofit2.Response
 
 class MainActivity : ComponentActivity() {
 
-    private val listViewModel by viewModels<MovieListViewModel> {MovieListViewModel.Factory}
+    private val listViewModel by viewModels<MovieListViewModel> { MovieListViewModel.Factory }
+    private val detailViewModel by viewModels<MovieDetailViewModel> { MovieDetailViewModel.Factory }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -55,7 +57,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     CineNowApp(
-                        listViewModel = listViewModel
+                        listViewModel = listViewModel,
+                        detailViewModel = detailViewModel
                     )
 
                 }

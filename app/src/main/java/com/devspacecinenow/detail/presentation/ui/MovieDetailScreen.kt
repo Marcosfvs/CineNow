@@ -1,4 +1,4 @@
-package com.devspacecinenow.detail.presentation
+package com.devspacecinenow.detail.presentation.ui
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,9 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.devspacecinenow.ApiService
 import com.devspacecinenow.common.model.MovieDTO
 import com.devspacecinenow.common.data.RetrofitClient
+import com.devspacecinenow.detail.presentation.MovieDetailViewModel
 import com.devspacecinenow.ui.theme.CineNowTheme
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,27 +38,11 @@ import retrofit2.Response
 fun MovieDetailScreen(
     movieId: String,
     navHostController: NavHostController,
+    detailViewModel: MovieDetailViewModel
     ){
-    var movieDTO by remember { mutableStateOf<MovieDTO?>(null) }
-    val apiService = RetrofitClient.retrofitInstance.create(ApiService::class.java)
+    val movieDTO by detailViewModel.uiDetailMovie.collectAsState()
+    detailViewModel.fetchMovieDetail(movieId)
 
-    apiService.getMovieById(movieId).enqueue(
-        object : Callback<MovieDTO> {
-            override fun onResponse(call: Call<MovieDTO>, response: Response<MovieDTO>) {
-                if (response.isSuccessful) {
-                    movieDTO = response.body()
-                } else {
-
-                    Log.d("MainActivity", "Request Error :: ${response.errorBody()}")
-                }
-            }
-
-            override fun onFailure(call: Call<MovieDTO>, t: Throwable) {
-                Log.d("MainActivity", "Network Error :: ${t.message}")
-            }
-
-        }
-    )
     // let {}  é a mesma coisa de if(val != null)
     movieDTO?.let {
         Column(
@@ -69,6 +54,7 @@ fun MovieDetailScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = {
+                    detailViewModel.cleanMovieID()
                     navHostController.popBackStack()
 
                 }) {

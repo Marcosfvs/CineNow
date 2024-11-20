@@ -82,7 +82,7 @@ private fun MovieDetailContent(movie: MovieDTO) {
     ) {
         AsyncImage(
             modifier = Modifier
-                .height(500.dp)
+                .height(300.dp)
                 .fillMaxSize(),
             contentScale = ContentScale.Crop,
             model = movie.posterFullPath,

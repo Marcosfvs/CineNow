@@ -6,23 +6,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.devspacecinenow.common.data.RetrofitClient
-import com.devspacecinenow.common.model.MovieDTO
+import com.devspacecinenow.common.model.MovieDto
 import com.devspacecinenow.detail.data.DetailService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MovieDetailViewModel(
     private val detailService: DetailService,
 
     ) : ViewModel() {
-    private val _uiDetailMovie = MutableStateFlow<MovieDTO?>(null)
-    val uiDetailMovie: StateFlow<MovieDTO?> = _uiDetailMovie
+    private val _uiDetailMovie = MutableStateFlow<MovieDto?>(null)
+    val uiDetailMovie: StateFlow<MovieDto?> = _uiDetailMovie
 
     fun fetchMovieDetail(movieId: String) {
         if (_uiDetailMovie.value == null) {

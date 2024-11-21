@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 //Notação para o retrofit transformar o Gson em dataclass,
 //nesse caso não precisa pois temos um conversor(.addConverterFactory(GsonConverterFactory.create())) no retrofit que já possui essa funcionalidade
 //@kotlinx.serialization.Serializable
-data class MovieDTO(
+data class MovieDto(
     val id: Int,
     val title:String,
     val overview:String,

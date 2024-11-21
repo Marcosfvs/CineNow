@@ -2,5 +2,5 @@ package com.devspacecinenow.common.model
 
 
 data class MovieResponse(
-    val results: List<MovieDTO>
+    val results: List<MovieDto>
 )

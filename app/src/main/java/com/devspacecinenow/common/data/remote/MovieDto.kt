@@ -1,4 +1,4 @@
-package com.devspacecinenow.common.model
+package com.devspacecinenow.common.data.remote
 
 import com.google.gson.annotations.SerializedName
 

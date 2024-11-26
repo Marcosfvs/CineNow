@@ -1,6 +1,6 @@
 package com.devspacecinenow.detail.data
 
-import com.devspacecinenow.common.model.MovieDto
+import com.devspacecinenow.common.data.remote.MovieDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -1,4 +1,4 @@
-package com.devspacecinenow.common.data
+package com.devspacecinenow.common.data.remote
 
 import com.devspacecinenow.BuildConfig
 import okhttp3.OkHttpClient
@@ -6,8 +6,8 @@ import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val BASE_URL: String = "https://api.themoviedb.org/3/movie/"
 object RetrofitClient {
+    private const val BASE_URL: String = "https://api.themoviedb.org/3/movie/"
     // O Retrofitbuilder vai ser capaz de criar o service
 
     //OKHttpClient - Intercepta a chamada, toda vez que faz a chamada da API, vai passar o token para ter acesso a API

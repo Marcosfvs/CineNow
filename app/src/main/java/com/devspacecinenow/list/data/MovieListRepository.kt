@@ -1,9 +1,8 @@
 package com.devspacecinenow.list.data
 
-import android.accounts.NetworkErrorException
-import com.devspacecinenow.common.model.MovieResponse
+import com.devspacecinenow.common.data.remote.MovieResponse
+import com.devspacecinenow.common.model.Movie
 import com.devspacecinenow.list.data.local.MovieListLocalDataSource
-import com.devspacecinenow.list.data.remote.ListService
 import com.devspacecinenow.list.data.remote.MovieListRemoteDataSource
 
 
@@ -12,21 +11,28 @@ class MovieListRepository(
     private val remote: MovieListRemoteDataSource
 ) {
 
-    suspend fun getNowPlaying(): Result<MovieResponse?> {
-        return Result.success(MovieResponse(emptyList()))
-    }
-        //try tenta fazer tal coisa, se não conseguir catch(segura) o erro não mostra para o usuário.
-        /*return  try {
-            val response = listService.getNowPlayingMovies()
-            if (response.isSuccessful) {
-                Result.success(response.body())
+    suspend fun getNowPlaying(): Result<List<Movie>?> {
+        return try {
+            val result = remote.getNowPlaying()
+            if (result.isSuccess) {
+                val moviesRemote = result.getOrNull() ?: emptyList()
+                if (moviesRemote.isNotEmpty()) {
+                    local.updateLocalItems(moviesRemote)
+                }
+                // Source of truth
+                return  Result.success(local.getNowPlayingMovies())
+
             } else {
-                Result.failure(NetworkErrorException(response.message()))
+                val localData = local.getNowPlayingMovies()
+                if (localData.isEmpty()) {
+                    return result
+                }
+                Result.success(localData)
             }
         } catch (ex: Exception) {
             ex.printStackTrace()
             Result.failure(ex)
-        }*/
+        }
     }
 
     suspend fun getTopRated(): Result<MovieResponse?> {
@@ -60,18 +66,20 @@ class MovieListRepository(
         }*/
     }
 
-    suspend fun getPopular(): Result<MovieResponse?>{
+    suspend fun getPopular(): Result<MovieResponse?> {
         return Result.success(MovieResponse(emptyList()))
-       /* return try {
-            val response = listService.getPopularMovies()
-            if (response.isSuccessful){
-                Result.success(response.body())
-            }else{
-                Result.failure(NetworkErrorException(response.message()))
-            }
-        } catch (ex: Exception){
-            ex.printStackTrace()
-            Result.failure(ex)
-        }
-    }*/
+        /* return try {
+             val response = listService.getPopularMovies()
+             if (response.isSuccessful){
+                 Result.success(response.body())
+             }else{
+                 Result.failure(NetworkErrorException(response.message()))
+             }
+         } catch (ex: Exception){
+             ex.printStackTrace()
+             Result.failure(ex)
+         }
+     }*/
+    }
 }
+

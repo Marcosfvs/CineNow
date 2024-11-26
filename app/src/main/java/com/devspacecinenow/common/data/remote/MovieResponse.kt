@@ -1,4 +1,4 @@
-package com.devspacecinenow.common.model
+package com.devspacecinenow.common.data.remote
 
 
 data class MovieResponse(

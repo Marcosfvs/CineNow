@@ -7,8 +7,6 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.devspacecinenow.CineNowApplication
-import com.devspacecinenow.common.data.RetrofitClient
-import com.devspacecinenow.list.data.remote.ListService
 import com.devspacecinenow.list.data.MovieListRepository
 import com.devspacecinenow.list.presentation.ui.MovieListUiState
 import com.devspacecinenow.list.presentation.ui.MovieUiData
@@ -45,14 +43,14 @@ class MovieListViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getNowPlaying()
             if (result.isSuccess) {
-                val movies = result.getOrNull()?.results
+                val movies = result.getOrNull()
                 if (movies != null) {
                     val movieUiDataList = movies.map { MovieDTO ->
                         MovieUiData(
                             id = MovieDTO.id,
                             title = MovieDTO.title,
                             overview = MovieDTO.overview,
-                            image = MovieDTO.posterFullPath
+                            image = MovieDTO.image
                         )
                     }
                     _uiNowPlaying.value = MovieListUiState(list = movieUiDataList)
@@ -179,10 +177,7 @@ class MovieListViewModel(
                 modelClass: Class<T>,
                 extras: CreationExtras
             ): T {
-                val listService =
-                    RetrofitClient.retrofitInstance.create(ListService::class.java)
                 val application = checkNotNull(extras[APPLICATION_KEY])
-
                 return MovieListViewModel(
                    repository = (application as CineNowApplication).repository
                 ) as T

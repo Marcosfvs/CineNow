@@ -19,21 +19,22 @@ class MovieListRepository(
                 if (moviesRemote.isNotEmpty()) {
                     local.updateLocalItems(moviesRemote)
                 }
-                // Source of truth
-                return  Result.success(local.getNowPlayingMovies())
 
             } else {
                 val localData = local.getNowPlayingMovies()
                 if (localData.isEmpty()) {
                     return result
                 }
-                Result.success(localData)
             }
+            // Source of truth
+            Result.success(local.getNowPlayingMovies())
+
         } catch (ex: Exception) {
             ex.printStackTrace()
             Result.failure(ex)
         }
     }
+
 
     suspend fun getTopRated(): Result<MovieResponse?> {
         return Result.success(MovieResponse(emptyList()))
@@ -82,4 +83,3 @@ class MovieListRepository(
      }*/
     }
 }
-

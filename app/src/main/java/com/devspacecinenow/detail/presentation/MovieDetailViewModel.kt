@@ -40,7 +40,7 @@ class MovieDetailViewModel(
 
     fun cleanMovieID() {
         viewModelScope.launch {
-            delay(1000)
+            delay(2000)
             _uiDetailMovie.value = null
         }
     }

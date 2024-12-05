@@ -19,15 +19,17 @@ class MovieListRepository(
                 if (moviesRemote.isNotEmpty()) {
                     local.updateLocalItems(moviesRemote)
                 }
+                // Source of truth
+                Result.success(local.getNowPlayingMovies())
 
             } else {
                 val localData = local.getNowPlayingMovies()
                 if (localData.isEmpty()) {
                     return result
+                } else {
+                    Result.success(localData)
                 }
             }
-            // Source of truth
-            Result.success(local.getNowPlayingMovies())
 
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -35,51 +37,71 @@ class MovieListRepository(
         }
     }
 
-
-    suspend fun getTopRated(): Result<MovieResponse?> {
-        return Result.success(MovieResponse(emptyList()))
-        /*return try {
-            val response = listService.getTopRatedMovies()
-            if (response.isSuccessful) {
-                Result.success(response.body())
-            }else{
-                Result.failure(NetworkErrorException(response.message()))
+    suspend fun getTopRated(): Result<List<Movie>?> {
+        return try {
+            val result = remote.getTopRated()
+            if (result.isSuccess) {
+                val moviesRemote = result.getOrNull() ?: emptyList()
+                if (moviesRemote.isNotEmpty()) {
+                    local.updateLocalItems(moviesRemote)
+                }
+                Result.success(local.getTopRatedMovies())
+            } else {
+                val localData = local.getTopRatedMovies()
+                if (localData.isEmpty()) {
+                    return result
+                }
+                Result.success((localData))
             }
-        } catch (ex: Exception){
+        } catch (ex: Exception) {
             ex.printStackTrace()
             Result.failure(ex)
-        }*/
+        }
 
     }
 
-    suspend fun getUpComing(): Result<MovieResponse?> {
-        return Result.success(MovieResponse(emptyList()))
-        /*return try {
-            val response = listService.getUpcomingMovies()
-            if (response.isSuccessful){
-                Result.success(response.body())
-            }else {
-                Result.failure(NetworkErrorException(response.message()))
+    suspend fun getUpComing(): Result<List<Movie>?> {
+        return try {
+            val result = remote.getUpComing()
+            if (result.isSuccess) {
+                val moviesRemote = result.getOrNull() ?: emptyList()
+                if (moviesRemote.isNotEmpty()) {
+                    local.updateLocalItems(moviesRemote)
+                }
+                Result.success(local.getUpComingMovies())
+            } else {
+                val localData = local.getUpComingMovies()
+                if (localData.isEmpty()) {
+                    return result
+                } else
+                    Result.success(localData)
             }
-        } catch (ex: Exception){
+        } catch (ex: Exception) {
             ex.printStackTrace()
             Result.failure(ex)
-        }*/
+        }
     }
 
-    suspend fun getPopular(): Result<MovieResponse?> {
-        return Result.success(MovieResponse(emptyList()))
-        /* return try {
-             val response = listService.getPopularMovies()
-             if (response.isSuccessful){
-                 Result.success(response.body())
-             }else{
-                 Result.failure(NetworkErrorException(response.message()))
-             }
-         } catch (ex: Exception){
-             ex.printStackTrace()
-             Result.failure(ex)
-         }
-     }*/
+    suspend fun getPopular(): Result<List<Movie>?> {
+        return try {
+            val result = remote.getPopular()
+            if (result.isSuccess) {
+                val moviesRemote = result.getOrNull() ?: emptyList()
+                if (moviesRemote.isNotEmpty()) {
+                    local.updateLocalItems(moviesRemote)
+                }
+                Result.success(local.getPopularMovies())
+            } else {
+                val localData = local.getPopularMovies()
+                if (localData.isEmpty()) {
+                    return result
+                } else
+                    Result.success(localData)
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            Result.failure(ex)
+        }
     }
+
 }

@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -31,38 +33,52 @@ fun MovieDetailScreen(
     movieId: String,
     navHostController: NavHostController,
     detailViewModel: MovieDetailViewModel
-    ){
+) {
     val movieDTO by detailViewModel.uiDetailMovie.collectAsState()
-    detailViewModel.fetchMovieDetail(movieId)
+    LaunchedEffect(key1 = movieId) {
+        detailViewModel.fetchMovieDetail(movieId)
+    }
 
     // let {}  é a mesma coisa de if(val != null)
-    movieDTO?.let {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
+    when (movieDTO) {
+        is MovieDetailUiState.Loading -> {
+            CircularProgressIndicator()
+        }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+        is MovieDetailUiState.Success -> {
+            val movie = (movieDTO as MovieDetailUiState.Success)
+                .movie
+            Column(
+                modifier = Modifier.fillMaxSize()
             ) {
-                IconButton(onClick = {
-                    detailViewModel.cleanMovieID()
-                    navHostController.popBackStack()
 
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Back Button"
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = {
+                        detailViewModel.cleanMovieID()
+                        navHostController.popBackStack()
+
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back Button"
+                        )
+                    }
+
+                    Text(
+                        modifier = Modifier.padding(start = 4.dp),
+                        text = movie.title
                     )
+
                 }
-
-                Text(
-                    modifier = Modifier.padding(start = 4.dp),
-                    text = it.title
-                )
-
+                MovieDetailContent(movie)
             }
-            MovieDetailContent(it)
+        }
+
+        is MovieDetailUiState.Error -> {
+            Text("Error loading movie details")
         }
     }
 }

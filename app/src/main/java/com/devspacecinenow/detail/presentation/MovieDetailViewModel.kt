@@ -8,6 +8,8 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.devspacecinenow.common.data.remote.RetrofitClient
 import com.devspacecinenow.common.data.remote.MovieDto
 import com.devspacecinenow.detail.data.DetailService
+import com.devspacecinenow.detail.presentation.ui.MovieDetailUiState
+import com.devspacecinenow.list.presentation.ui.MovieListUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,22 +20,21 @@ class MovieDetailViewModel(
     private val detailService: DetailService,
 
     ) : ViewModel() {
-    private val _uiDetailMovie = MutableStateFlow<MovieDto?>(null)
-    val uiDetailMovie: StateFlow<MovieDto?> = _uiDetailMovie
+    private val _uiDetailMovie = MutableStateFlow<MovieDetailUiState>(MovieDetailUiState.Loading)
+    val uiDetailMovie: StateFlow<MovieDetailUiState> = _uiDetailMovie
 
     fun fetchMovieDetail(movieId: String) {
-        if (_uiDetailMovie.value == null) {
-            viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiDetailMovie.value = MovieDetailUiState.Loading
+       try{
                 val response = detailService.getMovieById(movieId)
                 if (response.isSuccessful) {
-                    _uiDetailMovie.value = response.body()
+                    _uiDetailMovie.value = MovieDetailUiState.Success(response.body()!!)
                 } else {
-
-                    Log.d(
-                        "MovieDetailViewModel",
-                        "Request Error :: ${response.errorBody()}"
-                    )
+                    _uiDetailMovie.value = MovieDetailUiState.Error ("Request Error")
                 }
+            } catch (e: Exception){
+                _uiDetailMovie.value = MovieDetailUiState.Error ("Network Error")
             }
         }
     }
@@ -41,14 +42,17 @@ class MovieDetailViewModel(
     fun cleanMovieID() {
         viewModelScope.launch {
             delay(2000)
-            _uiDetailMovie.value = null
+            _uiDetailMovie.value = MovieDetailUiState.Loading
         }
     }
 
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras
+            ): T {
                 val detailService =
                     RetrofitClient.retrofitInstance.create(DetailService::class.java)
                 return MovieDetailViewModel(
@@ -58,5 +62,7 @@ class MovieDetailViewModel(
 
         }
     }
+
+
 
 }

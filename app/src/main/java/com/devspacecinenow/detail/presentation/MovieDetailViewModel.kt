@@ -1,15 +1,12 @@
 package com.devspacecinenow.detail.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.devspacecinenow.common.data.remote.RetrofitClient
-import com.devspacecinenow.common.data.remote.MovieDto
 import com.devspacecinenow.detail.data.DetailService
 import com.devspacecinenow.detail.presentation.ui.MovieDetailUiState
-import com.devspacecinenow.list.presentation.ui.MovieListUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

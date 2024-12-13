@@ -7,7 +7,7 @@ import com.devspacecinenow.list.data.remote.MovieListRemoteDataSource
 
 
 class MovieListRepository(
-    private val local: MovieListLocalDataSource,
+    private val local: LocalDataSource,
     private val remote: MovieListRemoteDataSource
 ) {
 

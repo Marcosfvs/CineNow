@@ -21,8 +21,9 @@ import org.junit.Test
 class MovieListViewModelTest {
     //criação do repository duble
     private val repository: MovieListRepository = mock()
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    private  val testDispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
+    private val testDispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
 
     //criação do viewmodel duble
     private val underTest by lazy {
@@ -60,7 +61,6 @@ class MovieListViewModelTest {
                     )
                 )
                 assertEquals(expected, awaitItem())
-
             }
         }
     }

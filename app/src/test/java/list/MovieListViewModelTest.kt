@@ -11,8 +11,10 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -191,7 +193,11 @@ class MovieListViewModelTest {
             whenever(repository.getUpComing()).thenReturn(Result.success(movies))
 
             //When
-            val result = underTest.uiUpComingMovies.value
+            var result: MovieListUiState?= null
+
+            backgroundScope.launch(testDispatcher){
+                result = underTest.uiUpComingMovies.first()
+            }
 
             //Then assert expected value
             val expected = MovieListUiState(
@@ -220,7 +226,11 @@ class MovieListViewModelTest {
             whenever(repository.getNowPlaying()).thenReturn(Result.success(movies))
 
             //When
-            val result = underTest.uiNowPlaying.value
+            var result: MovieListUiState?= null
+
+            backgroundScope.launch(testDispatcher){
+                result = underTest.uiNowPlaying.first()
+            }
 
             //Then assert expected value
             val expected = MovieListUiState(
@@ -249,7 +259,11 @@ class MovieListViewModelTest {
             whenever(repository.getTopRated()).thenReturn(Result.success(movies))
 
             //When
-            val result = underTest.uiTopRatedMovies.value
+            var result: MovieListUiState?= null
+
+            backgroundScope.launch(testDispatcher){
+                result = underTest.uiTopRatedMovies.first()
+            }
 
             //Then assert expected value
             val expected = MovieListUiState(
@@ -278,7 +292,11 @@ class MovieListViewModelTest {
             whenever(repository.getPopular()).thenReturn(Result.success(movies))
 
             //When
-            val result = underTest.uiPopularMovies.value
+            var result: MovieListUiState?= null
+
+            backgroundScope.launch(testDispatcher){
+                result = underTest.uiPopularMovies.first()
+            }
 
             //Then assert expected value
             val expected = MovieListUiState(

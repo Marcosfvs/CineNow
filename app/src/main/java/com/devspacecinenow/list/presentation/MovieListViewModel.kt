@@ -42,7 +42,7 @@ class MovieListViewModel(
 
     private fun fetchNowPlaying() {
         _uiNowPlaying.value = MovieListUiState(isLoading = true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             val result = repository.getNowPlaying()
             if (result.isSuccess) {
                 val movies = result.getOrNull()
@@ -107,7 +107,7 @@ class MovieListViewModel(
 
     private fun fetchUpComing() {
         _uiUpComingMovies.value = MovieListUiState(isLoading = true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             val result = repository.getUpComing()
             if (result.isSuccess) {
                 val movies = result.getOrNull()
@@ -140,7 +140,7 @@ class MovieListViewModel(
 
     private fun fetchPopularMovies() {
         _uiPopularMovies.value = MovieListUiState(isLoading = true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
 
             val result = repository.getPopular()
             if (result.isSuccess) {

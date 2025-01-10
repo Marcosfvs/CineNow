@@ -1,8 +1,6 @@
 package com.devspacecinenow.common.model
 
 
-
-
 data class Movie(
     val id: Int,
     val title: String,
